@@ -3,7 +3,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, field_validator
 from pydantic.v1.utils import validate_field_name
-
+from typing import Optional
 
 class ProfileSchema(BaseModel):
     name: str | None = None
@@ -44,3 +44,23 @@ class PhotoSchema(BaseModel):
     photo_type: str
     photo_path: str
 
+
+class NewsSchema(BaseModel):
+    name_news: str
+    url_news: str
+    start_date: datetime
+    end_date: Optional[datetime] = None
+
+    @field_validator("url_news")
+    def validate_url(cls, url_news: str) -> str:
+        if not re.match(r"^(https?://)?[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", url_news):
+            raise ValueError("Invalid URL format")
+        return url_news
+
+    model_config = {"from_attributes": True}
+
+
+class TagSchema(BaseModel):
+    name: str
+
+    model_config = {"from_attributes": True}
