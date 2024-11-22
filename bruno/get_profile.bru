@@ -1,0 +1,11 @@
+meta {
+  name: get_profile
+  type: http
+  seq: 3
+}
+
+get {
+  url: 127.0.0.1:8000/profile/me
+  body: json
+  auth: bearer
+}

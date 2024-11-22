@@ -1,0 +1,20 @@
+meta {
+  name: register_user
+  type: http
+  seq: 8
+}
+
+post {
+  url: 127.0.0.1:8000/auth/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "kotikov.lil@bk.ru",
+    "password": "QWasZX1233!",
+    "password_verification": "QWasZX1233!",
+    "role": "admin"
+  }
+}

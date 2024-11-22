@@ -1,0 +1,15 @@
+meta {
+  name: get_user
+  type: http
+  seq: 2
+}
+
+get {
+  url: 127.0.0.1:8000/auth/me
+  body: none
+  auth: bearer
+}
+
+headers {
+  Refresh-Token: eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ0b2tlbl90eXBlIjoiUmVmcmVzaC1Ub2tlbiIsImV4cGlyZSI6IjIwMjQtMTEtMTdUMTc6MTY6MjIuODQ5NjI4KzAwOjAwIn0.cL6QksJrTRzGIr8lmOZkCJSSFeLYC02fnYHBgWVNBxTIkgJnRAiOIzFeftDmIfhps2WH6fcr58UK8iMy5mUNci7Q1W0YAlsybNpbl6smzxzgXar72nLpxVjmndV3nPLk_dTD9bThBpTbbXo1koF0oCclZf89-I1SxfBpjKaTAsbv7lcCcUnd6HZifgYGCSvByPV3z-zFBwn4glTPuHBR7HbVbQBg5zWY6potSlkJ9-uPlCI1jhKuwugoKtAzwmSzOCcZRmV7wrSIozKOyZg63oHElnJCBmGC70dwZOhBoUE-iJL77DkEEpeRLfsHPr6qwWKsTZsxN4ylmgDaKJx2NQ
+}

@@ -1,0 +1,22 @@
+meta {
+  name: put_profile
+  type: http
+  seq: 5
+}
+
+put {
+  url: 127.0.0.1:8000/profile/me
+  body: json
+  auth: bearer
+}
+
+body:json {
+  {
+    "name": "Данил",
+    "second_name": "Котов",
+    "surname": "Евгеньевич",
+    "about_me": null,
+    "age": null,
+    "number_phone": null
+  }
+}
