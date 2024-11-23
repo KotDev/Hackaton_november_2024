@@ -41,3 +41,4 @@ async def create_tag_for_news(schema = CreateTagSchema, tags_manager: TagsManage
     """
     tag = await tags_manager.add_tag(schema.name)
     return TagsSchema(tag_id=tag.id, tag_name=tag.name)
+
