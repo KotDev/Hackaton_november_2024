@@ -7,6 +7,7 @@ interface Props {
   variant: "outline" | "default" | "secondary";
   onClick?: () => void;
   type: "button" | "reset" | "submit" | undefined;
+  onSubmit?: React.FormEventHandler<HTMLButtonElement>;
 }
 
 export const Button = ({
@@ -14,6 +15,7 @@ export const Button = ({
   children,
   variant,
   onClick,
+  onSubmit,
   type = "button",
 }: Props) => {
   const styleRender = (variant: Props["variant"]) => {
@@ -29,6 +31,7 @@ export const Button = ({
 
   return (
     <button
+      onSubmit={onSubmit}
       onClick={onClick}
       type={type}
       className={cn(

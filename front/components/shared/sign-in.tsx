@@ -16,13 +16,21 @@ export const SignInForm = ({ className }: Props) => {
   const [passlValue, setPasslValue] = React.useState<string>("");
   const [reqPassValue, setReqPassValue] = React.useState<string>("");
 
-  const clickHandler = () => {
+  const submitHandler = async (e: React.FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     const userData = {
       email: emailValue,
       password: passlValue,
-      reqpassword: reqPassValue,
+      password_verification: reqPassValue,
+      role: "user",
     };
-    api.post("/auth/register", userData);
+    try {
+      const response = await api.post("/auth/register", userData);
+      const data = await response.data;
+      console.log(data);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -60,7 +68,7 @@ export const SignInForm = ({ className }: Props) => {
           />
         </div>
         <Button
-          onClick={clickHandler}
+          onSubmit={submitHandler}
           type="button"
           variant={"outline"}
           className="w-full"
