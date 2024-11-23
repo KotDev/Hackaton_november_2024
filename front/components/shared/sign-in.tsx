@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import React from "react";
 import { Input } from "./input";
 import { Button } from "./button";
-import { useAuthForm } from "@/store/store";
+import { useAuthForm, useProfileInfo } from "@/store/store";
 import { api } from "@/Api/Auth/route";
 
 interface Props {
@@ -15,6 +15,7 @@ export const SignInForm = ({ className }: Props) => {
   const [emailValue, setEmailValue] = React.useState<string>("");
   const [passlValue, setPasslValue] = React.useState<string>("");
   const [reqPassValue, setReqPassValue] = React.useState<string>("");
+  const { setProfileInfo } = useProfileInfo((state) => state);
 
   const submitHandler = async () => {
     const userData = {
@@ -26,7 +27,11 @@ export const SignInForm = ({ className }: Props) => {
     try {
       const response = await api.post("/auth/register", userData);
       const data = await response.data;
-      console.log(data);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("tokens", data);
+      }
+      console.log(localStorage);
+      setProfileInfo(data);
     } catch (err) {
       console.error(err);
     }
@@ -76,7 +81,7 @@ export const SignInForm = ({ className }: Props) => {
           Зарегестрироваться
         </Button>
         <button
-          onClick={() => setActiveForm("login")}
+          onClick={() => setActiveForm("profile")}
           type="button"
           className="text-secondary font-light text-md hover:underline"
         >

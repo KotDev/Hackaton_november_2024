@@ -3,6 +3,7 @@ import { useAuthForm } from "@/store/store";
 import React from "react";
 import { SignInForm } from "./sign-in";
 import { LoginForm } from "./offer-popup";
+import { ProfileCard } from "./profile";
 
 interface Props {
   className?: string;
@@ -10,7 +11,6 @@ interface Props {
 
 export const AuthForm = ({ className }: Props) => {
   const { isActive, activeForm } = useAuthForm((state) => state);
-
   return (
     <div
       className={cn(
@@ -19,7 +19,13 @@ export const AuthForm = ({ className }: Props) => {
         className
       )}
     >
-      {activeForm === "signin" ? <SignInForm /> : <LoginForm />}
+      {activeForm === "signin" ? (
+        <SignInForm />
+      ) : activeForm === "login" ? (
+        <LoginForm />
+      ) : (
+        <ProfileCard />
+      )}
     </div>
   );
 };

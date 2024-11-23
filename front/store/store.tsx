@@ -12,9 +12,9 @@ export const useCategory = create<IUseCategory>()((set) => ({
 
 interface IUseAuthForm {
   isActive: boolean;
-  activeForm: "signin" | "login";
+  activeForm: "signin" | "login" | "profile";
   setIsActive: (value: boolean) => void;
-  setActiveForm: (value: "signin" | "login") => void;
+  setActiveForm: (value: "signin" | "login" | "profile") => void;
 }
 
 export const useAuthForm = create<IUseAuthForm>()((set) => ({
@@ -22,4 +22,14 @@ export const useAuthForm = create<IUseAuthForm>()((set) => ({
   activeForm: "signin",
   setIsActive: (value) => set(() => ({ isActive: value })),
   setActiveForm: (value) => set(() => ({ activeForm: value })),
+}));
+
+interface IUseProfileInfo {
+  data: object;
+  setProfileInfo: (value: object) => void;
+}
+
+export const useProfileInfo = create<IUseProfileInfo>()((set) => ({
+  data: {},
+  setProfileInfo: (value) => set(() => ({ data: value })),
 }));
