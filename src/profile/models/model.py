@@ -1,15 +1,13 @@
 from typing import List
-from sqlalchemy import ForeignKey, String, Text
+from sqlalchemy import Column, ForeignKey, String, Text, Integer, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from database import Base
-from sqlalchemy import Table
-
 
 profile_buisness_form = Table(
-    "profile_buisness_form",
+    "profile_business_form",
     Base.metadata,
-    mapped_column("profile_id", ForeignKey("profiles.profile_id", ondelete="CASCADE"), primary_key=True),
-    mapped_column("buisness_form_id", ForeignKey("Buisness_form.id", ondelete="CASCADE"), primary_key=True),
+    Column("profile_id", ForeignKey("profiles.profile_id", ondelete="CASCADE"), primary_key=True),
+    Column("business_form_id", ForeignKey("business_form.id", ondelete="CASCADE"), primary_key=True),
 )
 
 class Profile(Base):
@@ -19,20 +17,44 @@ class Profile(Base):
     second_name: Mapped[str | None] = mapped_column(String(50), nullable=True, default=None)
     surname: Mapped[str | None] = mapped_column(String(50), nullable=True, default=None)
     about_me: Mapped[str | None] = mapped_column(String(400), nullable=True, default=None)
-    age: Mapped[int | None] = mapped_column(nullable=True, default=None)
+    age: Mapped[int | None] = mapped_column(Integer, nullable=True, default=None)
     number_phone: Mapped[str | None] = mapped_column(String(11), nullable=True, default=None)
-    buisness_forms: Mapped[List["Buisness_form"]] = relationship(secondary=profile_buisness_form, back_populates="profiles")
-    photos: Mapped[List["Photo"]] = relationship(back_populates="profile")
-    user: Mapped["User"] = relationship(back_populates="profile")
 
+    # Relationships
+    buisness_forms: Mapped[List["BuisnessForm"]] = relationship(
+        secondary=profile_buisness_form,
+        back_populates="profiles",
+        lazy="select",
+    )
+    photos: Mapped[List["Photo"]] = relationship(
+        back_populates="profile",
+        lazy="select",
+    )
+    user: Mapped["User"] = relationship(
+        back_populates="profile",
+        lazy="joined",
+    )
 
+class BuisnessForm(Base):
+    __tablename__ = "business_form"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    buisness_form: Mapped[str | None] = mapped_column(String(50), nullable=True, default=None)
+    form_of_ownership: Mapped[str | None] = mapped_column(String(50), nullable=True, default=None)
+    size_shape: Mapped[str | None] = mapped_column(String(50), nullable=True, default=None)
+    industry_form: Mapped[str | None] = mapped_column(String(50), nullable=True, default=None)
+    geographical_coverage: Mapped[str | None] = mapped_column(String(50), nullable=True, default=None)
+    type_of_clients: Mapped[str | None] = mapped_column(String(50), nullable=True, default=None)
+    nature_of_the_organization: Mapped[str | None] = mapped_column(String(50), nullable=True, default=None)
+    life_cycle: Mapped[str | None] = mapped_column(String(50), nullable=True, default=None)
+    form_description: Mapped[str | None] = mapped_column(Text, nullable=True, default=None)
 
-class Buisness_form(Base):
-    __tablename__ = "Buisness_form"
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    Buisness_form: Mapped[Text] = mapped_column(String(50), nullable=True, default=None)
-    Form_description: Mapped[Text] = mapped_column(String(50), nullable=True, default=None)
-    profiles: Mapped[List["Profile"]] = relationship(secondary=profile_buisness_form, back_populates="buisness_forms")
+    # Relationships
+    profiles: Mapped[List["Profile"]] = relationship(
+        secondary=profile_buisness_form,
+        back_populates="buisness_forms",
+        lazy="select",
+    )
+
 
 class Photo(Base):
     __tablename__ = "photos"

@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 
 import uvicorn
+from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi import FastAPI
 from fastapi.responses import Response
 from prometheus_client import Counter, generate_latest, CONTENT_TYPE_LATEST
@@ -13,8 +14,15 @@ from middlewares import PrometheusMiddleware
 from database import Base
 from authorization.models.model import User
 from profile.models.model import Profile, Photo
+from ml.models.models import BuisnessSupport, News, Tag
+from apscheduler.triggers.cron import CronTrigger
+from pars_news import run_parsing_news
+from pars_support_buisnes import run_parsing_support_business
 from profile.controllers.profile_conrollers import profile_router
-
+from ml.controllers.news_controllers import router_news
+from ml.controllers.supprot_business_controllers import router_support_business
+from ml.logic.news_logic import NewsLogic
+from ml.logic.support_business_logic import BusinessSupportLogic
 
 LOG_COUNT: Counter = Counter(
     "log_messages_total",
@@ -30,11 +38,31 @@ class PrometheusLoggingHandler(logging.Handler):
 
 db = DataBase()
 base_manager = BaseManager(base=Base)
+scheduler = BackgroundScheduler()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+
     await base_manager.init_models()
+    data_news = await run_parsing_news()
+    await NewsLogic.format_parse_data(parse_data=data_news)
+    data_support = await run_parsing_support_business()
+    await BusinessSupportLogic.format_data_parser(data_support)
+    #scheduler.add_job(
+    #    run_parsing_news,
+    #    CronTrigger(hour=3, minute=0),  # Ежедневно в 03:00
+    #    id="daily_parser_news",
+    #    replace_existing=True,
+    #)
+    #scheduler.add_job(
+    #    run_parsing_support_business,
+    #    CronTrigger(hour=4, minute=0),
+    #    id="daily_parser_support_business",
+    #    replace_existing=True,
+    #)
+    scheduler.start()
     yield
+    scheduler.shutdown()
     await base_manager.clear_models()
 
 
@@ -43,6 +71,8 @@ app.add_middleware(JWTMiddleware)
 app.add_middleware(PrometheusMiddleware)
 app.include_router(auth_router)
 app.include_router(profile_router)
+app.include_router(router_news)
+app.include_router(router_support_business)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 logger.addHandler(PrometheusLoggingHandler())
