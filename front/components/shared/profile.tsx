@@ -20,7 +20,6 @@ export const ProfileCard = ({ className }: Props) => {
     access_token: "",
     token_type: "Bearer",
   });
-  const router = useRouter();
 
   React.useEffect(() => {
     const data = localStorage.getItem("tokens");
@@ -31,7 +30,6 @@ export const ProfileCard = ({ className }: Props) => {
 
   React.useEffect(() => {
     if (tokens.access_token === "") {
-      router.push("/");
       return;
     }
     api

@@ -32,6 +32,7 @@ export const SignInForm = ({ className }: Props) => {
       }
       console.log(localStorage);
       setProfileInfo(data);
+      setActiveForm("profile");
     } catch (err) {
       console.error(err);
     }
