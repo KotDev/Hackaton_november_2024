@@ -30,12 +30,11 @@ class ProfileSchema(BaseModel):
             raise ValueError("Age must be between 18 and 100")
         return value
 
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 
 class BusinessFormSchema(BaseModel):
-    id: int
+    profile_id: int
     buisness_form: Optional[str] = None
     form_of_ownership: Optional[str] = None
     size_shape: Optional[str] = None
@@ -49,12 +48,24 @@ class BusinessFormSchema(BaseModel):
     class Config:
         orm_mode = True
 
+class UpdateBusinessFormSchema(BaseModel):
+    buisness_form: Optional[str] = None
+    form_of_ownership: Optional[str] = None
+    size_shape: Optional[str] = None
+    industry_form: Optional[str] = None
+    geographical_coverage: Optional[str] = None
+    type_of_clients: Optional[str] = None
+    nature_of_the_organization: Optional[str] = None
+    life_cycle: Optional[str] = None
+    form_description: Optional[str] = None
+
+    model_config = {"from_attributes": True}
+
 
 class ResponseProfileSchema(BaseModel):
     profile_id: int
     email: str
     profile: ProfileSchema
-    business_forms: List[BusinessFormSchema]
 
 
 class GetProfile(BaseModel):
@@ -64,5 +75,4 @@ class PhotoSchema(BaseModel):
     profile_id: int
     photo_type: str
     photo_path: str
-
 

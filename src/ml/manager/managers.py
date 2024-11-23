@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, not_, exists
 from sqlalchemy.orm import relationship, joinedload
 
 from database import DataBase
@@ -36,6 +36,16 @@ class BusinessSupportManager(DataBase, BusinessSupportManagerInterface):
                 .join(buisness_support_tags)
                 .join(Tag)
                 .where(Tag.name == tag_name)
+            )
+            result = await session.execute(query)
+            return result.scalars().all()
+
+    async def get_business_supports_with_not_tags(self):
+        async with self.async_session() as session:
+            query = (
+                select(BuisnessSupport)
+                .outerjoin(buisness_support_tags, buisness_support_tags.c.buisness_support_id == BuisnessSupport.id)
+                .where(buisness_support_tags.c.tag_id == None)
             )
             result = await session.execute(query)
             return result.scalars().all()
@@ -111,6 +121,16 @@ class NewsManager(DataBase, NewsManagerInterface):
             query = select(News).options(joinedload(News.tags))
             result = await session.execute(query)
             return result.scalars().unique().all()
+
+    async def get_news_with_not_tags(self):
+        async with self.async_session() as session:
+            query = (
+                select(News)
+                .options(joinedload(News.tags))  # Подгружаем связанные теги
+                .where(~News.tags.any())  # Проверяем отсутствие тегов
+            )
+            result = await session.execute(query)
+            return result.scalars().all()
 
 
     async def add_tags_to_news(self, news_id: int, tags: list[str]):

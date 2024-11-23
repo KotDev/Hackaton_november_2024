@@ -1,12 +1,17 @@
 from datetime import datetime
 
+import aiohttp
+from bs4 import BeautifulSoup
 from fastapi import HTTPException, Request
 from fastapi.params import Depends
 
-from ml.manager.managers import NewsManager
+from ml.manager.managers import NewsManager, TagsManager
 from profile.schemas import GetProfile
 from datetime import datetime
 import locale
+from ml.models.models import News
+from settings import parser
+
 
 class NewsLogic:
     # Устанавливаем русскую локаль
@@ -41,6 +46,42 @@ class NewsLogic:
 
             # Добавляем новость
             await manager.add_news(data)
+
+    @staticmethod
+    async def pars_news_info(news: News):
+        url = news.link
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                if response.status != 200:
+                    raise Exception(f"Failed to fetch news page. Status: {response.status}")
+                html_content = await response.text()
+
+        soup = BeautifulSoup(html_content, 'html.parser')
+        content_section = soup.find('section', class_='e-material__content')
+        paragraphs = []
+        if content_section:
+            paragraphs = [p.get_text(strip=True) for p in content_section.find_all('p')]
+
+        return paragraphs
+
+    @staticmethod
+    async def generate_ml_tag_for_news():
+        manager_news = NewsManager()
+        manager_tags = TagsManager()
+        add_tags = []
+        news = await manager_news.get_news_with_not_tags()
+        if not news:
+            return
+        for new in news:
+            content = await NewsLogic.pars_news_info(new)
+            ## функция мл которая возвращаеи тег
+            tags = []
+            for tag in tags:
+                if tag == "UnvariantText":
+                    await manager_news.delete_news(news_id=new.id)
+                tag = await manager_tags.add_tag(tag)
+                add_tags.append(tag.name)
+            await manager_news.add_tags_to_news(news_id=new.id, tags=add_tags)
 
 
     @staticmethod

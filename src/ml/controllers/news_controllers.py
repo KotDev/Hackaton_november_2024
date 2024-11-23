@@ -1,10 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
-# from setuptools.extern import names
 
-from setuptools import *
-
-
-from ml.schemas import RibbonNewsSchema, FilterTagSchema, TagsSchema, ResponseNewsSchema, NewsSchema
+from ml.schemas import RibbonNewsSchema, FilterTagSchema, TagsSchema, ResponseNewsSchema, NewsSchema, CreateTagSchema
 from ml.manager.managers import NewsManager, TagsManager
 
 router_news = APIRouter(prefix="/news", tags=["News"])
@@ -36,14 +32,4 @@ async def get_all_news(tag_names: list[str] | None = Query(None),  news_manager:
 async def get_tags(tags_manager: TagsManager = Depends(TagsManager)):
     tags = await tags_manager.get_all_tags()
     return FilterTagSchema(tags_filter=[TagsSchema(tag_id=tag.id, name=tag.name) for tag in tags] if tags else [])
-
-
-@router_news.post("/create_tag")
-async def create_tag_for_news(tag_name: str, tags_manager: TagsManager = Depends(TagsManager)):
-    """
-    Создать тег для новостей.
-    """
-    tag = await tags_manager.add_tag(tag_name)
-    return {"tag_id": tag.id, "name": tag.name}
-
 

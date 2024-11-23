@@ -1,8 +1,6 @@
-from http.client import responses
 
 from fastapi import APIRouter, Response
 from fastapi.params import Depends
-from pydantic.v1.schema import schema
 
 from profile.logic.profile_logic import ProfileLogic
 from profile.managers.managers import ProfileManager
@@ -22,14 +20,10 @@ async def get_me_profile(user: GetProfile = Depends(profile_logic.get_user)):
         return Response(status_code=404, content="Profile not found")
 
     profile_data = ProfileSchema.model_validate(profile)
-    business_forms = [
-        BusinessFormSchema.model_validate(bf) for bf in profile.buisness_forms
-    ]
     response = ResponseProfileSchema(
         profile_id=profile.profile_id,
         email=profile.user.email,
-        profile=profile_data,
-        business_forms=business_forms,
+        profile=profile_data
     )
     return response
 
@@ -48,8 +42,9 @@ async def create_profile(user: GetProfile = Depends(profile_logic.get_user)):
     if profile:
         return Response(status_code=409, content="Profile has already been created")
 
-    new_profile = await manager.add_profile(user.profile_id, schema=ProfileSchema())
-    return ProfileSchema.model_validate(new_profile).model_dump()
+    new_profile = await manager.add_profile(user.profile_id)
+    return ProfileSchema.from_orm(new_profile)
+
 
 
 

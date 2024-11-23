@@ -26,6 +26,7 @@ class BuisnessSupport(Base):
     __tablename__ = "buisness_support"
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(1000), nullable=False)
+    description: Mapped[Text] = mapped_column(Text, nullable=False)
     date_start: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     date_end: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     link: Mapped[str | None] = mapped_column(String(500), nullable=True)

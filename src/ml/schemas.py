@@ -13,6 +13,18 @@ class NewsSchema(BaseModel):
 
     model_config = {"from_attributes": True}
 
+
+class CreateTagBusinessSupportSchema(BaseModel):
+    tag_id: int
+    business_support_id: int
+
+class CreateTagNewsSchema(BaseModel):
+    tag_id: int
+    news_id: int
+
+class CreateTagSchema(BaseModel):
+    name: str
+
 class TagsSchema(BaseModel):
     tag_id: int
     name: str
@@ -33,6 +45,7 @@ class FilterTagSchema(BaseModel):
 class BusinessSupportSchema(BaseModel):
     id: int
     name: str
+    description: str
     date_start: datetime
     date_end: datetime
     link: str
@@ -93,6 +106,7 @@ class ResponseSupportSchema(BaseModel):
 
 class RibbonSupportSchema(BaseModel):
     ribbon: List[ResponseSupportSchema]
+
 
 
 

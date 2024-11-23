@@ -13,7 +13,7 @@ user_manager = UserManager()
 auth_logic = AUThLogic()
 jwt_logic = JWTLogic()
 
-@auth_router.post("/register")
+@auth_router.post("/register", response_model=JWTSchema)
 async def register(schema: RegisterSchema) -> JWTSchema:
     try:
         user = await user_manager.get_user(user_id=None, email=schema.email)

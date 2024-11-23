@@ -16,6 +16,7 @@ def extract_data_from_page(driver, wait, pattern, base_url):
         for card in cards:
             try:
                 content = card.find_element(By.CLASS_NAME, "rs-card__content-cont").text
+                descript = card.find_element(By.CLASS_NAME, "rs-card__description").text
                 match = pattern.search(content)
                 if match:
                     # Извлечение полей из текста
@@ -24,6 +25,7 @@ def extract_data_from_page(driver, wait, pattern, base_url):
                     date_end = datetime.strptime(match.group("date_end"), "%d.%m.%Y")
                     data.append({
                         "name": name,
+                        "description": descript,
                         "date_start": date_start,
                         "date_end": date_end,
                         "link": base_url
