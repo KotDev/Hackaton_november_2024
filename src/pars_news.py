@@ -13,7 +13,7 @@ async def run_parsing_news():
 
         # Перехват запросов
         def handle_request(request):
-            if 'ml' in request.url:  # Замените на нужное ключевое слово для запросов новостей
+            if 'news_and_support_business' in request.url:  # Замените на нужное ключевое слово для запросов новостей
                 print("Request intercepted:", request.url)
 
         page.on('route', handle_request)

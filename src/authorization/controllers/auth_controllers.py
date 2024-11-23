@@ -48,7 +48,3 @@ async def logout(request: Request, user: UserSchema = Depends(AUThLogic.get_user
     refresh_token = request.headers.get("Refresh-Token")
     redis_client.setex(refresh_token, timedelta(days=15), user.user_id)
     return {"detail": "User logged out successfully"}
-
-@auth_router.get("/me")
-async def get_me(user: UserSchema = Depends(AUThLogic.get_user)):
-    print(user.user_id, print(user.role))

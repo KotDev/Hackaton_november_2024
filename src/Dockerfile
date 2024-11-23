@@ -1,12 +1,21 @@
-FROM python:3.11
+FROM python:3.11-slim
 
 WORKDIR /src
+
+
+# Обновить pip и инструменты сборки
+RUN pip install --upgrade pip setuptools wheel
+
+# Копировать код
 COPY ./src /src
 
-RUN pip install --upgrade pip
-
+# Установить зависимости
 RUN pip install -r requirements.txt
+
+# Установить Playwright
+RUN playwright install
 
 EXPOSE 8000
 
 CMD ["python", "start.py"]
+

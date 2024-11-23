@@ -30,7 +30,7 @@ class Profile(Base):
 
 class BuisnessForm(Base):
     __tablename__ = "business_form"
-    business_id: Mapped[int] = mapped_column(ForeignKey("profiles.profile_id", ondelete="CASCADE"), primary_key=True)
+    profile_id: Mapped[int] = mapped_column(ForeignKey("profiles.profile_id", ondelete="CASCADE"), primary_key=True)
     buisness_form: Mapped[str | None] = mapped_column(String(50), nullable=True, default=None)
     form_of_ownership: Mapped[str | None] = mapped_column(String(50), nullable=True, default=None)
     size_shape: Mapped[str | None] = mapped_column(String(50), nullable=True, default=None)

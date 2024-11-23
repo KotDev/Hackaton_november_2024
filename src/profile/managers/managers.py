@@ -54,18 +54,18 @@ class BusinessFormManager(DataBase, BusinessFormManagerInterface):
     def __init__(self):
         super().__init__()
 
-    async def get_business_form(self, business_form_id: int | None, **kwargs):
-        return await self.get_obj(business_form_id, BuisnessForm, **kwargs)
+    async def get_business_form(self, profile_id: int | None, **kwargs):
+        return await self.get_obj(profile_id, BuisnessForm, **kwargs)
 
-    async def delete_business_form(self, business_form_id: int | None, **kwargs):
-        return await self.delete_obj(business_form_id, BuisnessForm, **kwargs)
+    async def delete_business_form(self, profile_id: int | None, **kwargs):
+        return await self.delete_obj(profile_id, BuisnessForm, **kwargs)
 
-    async def update_business_form(self, business_form_id: int | None, update_data: dict, **kwargs):
-        return await self.update_obj(business_form_id, BuisnessForm, update_data, **kwargs)
+    async def update_business_form(self, profile_id: int | None, update_data: dict, **kwargs):
+        return await self.update_obj(profile_id, BuisnessForm, update_data, **kwargs)
 
     async def add_business_form(self, profile_id: int):
         async with self.async_session() as session:
-            business_form = BuisnessForm(business_id=profile_id)
+            business_form = BuisnessForm(profile_id=profile_id)
             session.add(business_form)
             await session.commit()
         return business_form

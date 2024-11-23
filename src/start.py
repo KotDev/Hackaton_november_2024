@@ -14,17 +14,16 @@ from middlewares import PrometheusMiddleware
 from database import Base
 from authorization.models.model import User
 from profile.models.model import Profile, Photo, BuisnessForm
-from ml.models.models import BuisnessSupport, News, Tag
+from news_and_support_business.models.models import BuisnessSupport, News, Tag
 from apscheduler.triggers.cron import CronTrigger
 from pars_news import run_parsing_news
 from pars_support_buisnes import run_parsing_support_business
 from profile.controllers.profile_conrollers import profile_router
-from ml.controllers.news_controllers import router_news
-from ml.controllers.supprot_business_controllers import router_support_business
-from ml.logic.news_logic import NewsLogic
-from ml.logic.support_business_logic import BusinessSupportLogic
+from news_and_support_business.controllers.news_controllers import router_news
+from news_and_support_business.controllers.supprot_business_controllers import router_support_business
+from news_and_support_business.logic.news_logic import NewsLogic
+from news_and_support_business.logic.support_business_logic import BusinessSupportLogic
 from profile.controllers.buisness_form_controllers import business_form_router
-
 
 LOG_COUNT: Counter = Counter(
     "log_messages_total",

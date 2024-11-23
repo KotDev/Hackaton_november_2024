@@ -2,8 +2,8 @@ from sqlalchemy import select, not_, exists
 from sqlalchemy.orm import relationship, joinedload
 
 from database import DataBase
-from ml.manager.manager_interfaces import TagsManagerInterface, NewsManagerInterface, BusinessSupportManagerInterface
-from ml.models.models import Tag, News, news_tags, BuisnessSupport, buisness_support_tags
+from news_and_support_business.manager.manager_interfaces import TagsManagerInterface, NewsManagerInterface, BusinessSupportManagerInterface
+from news_and_support_business.models.models import Tag, News, news_tags, BuisnessSupport, buisness_support_tags
 from sqlalchemy import or_
 
 class BusinessSupportManager(DataBase, BusinessSupportManagerInterface):
@@ -97,10 +97,11 @@ class NewsManager(DataBase, NewsManagerInterface):
             await session.commit()
             return new_news
 
-
-    async def get_news_by_tags(self, tag_names: list[str]):
+    async def get_news_by_tags(self, tag_names: list[str], order_by_date: bool | None = None):
         """
         Получить все новости, связанные с указанными тегами.
+        :param tag_names: Список имен тегов.
+        :param order_by_date: None - без сортировки, True - по убыванию даты, False - по возрастанию даты.
         """
         async with self.async_session() as session:
             query = (
@@ -110,17 +111,33 @@ class NewsManager(DataBase, NewsManagerInterface):
                 .where(Tag.name.in_(tag_names))  # Ищем новости с любым из указанных тегов
                 .distinct()  # Убираем дубликаты, если новость связана с несколькими тегами
             )
+
+            if order_by_date is not None:
+                if order_by_date:
+                    query = query.order_by(News.date.desc())
+                else:
+                    query = query.order_by(News.date.asc())
+
             result = await session.execute(query)
             return result.scalars().all()
 
-    async def get_all_news_with_tags(self):
+    async def get_all_news_with_tags(self, order_by_date: bool | None = None):
         """
         Получить все новости и связанные с ними теги.
+        :param order_by_date: None - без сортировки, True - по убыванию даты, False - по возрастанию даты.
         """
         async with self.async_session() as session:
             query = select(News).options(joinedload(News.tags))
+
+            if order_by_date is not None:
+                if order_by_date:
+                    query = query.order_by(News.date.desc())  # Сортировка по убыванию
+                else:
+                    query = query.order_by(News.date.asc())  # Сортировка по возрастанию
+
             result = await session.execute(query)
             return result.scalars().unique().all()
+
 
     async def get_news_with_not_tags(self):
         async with self.async_session() as session:

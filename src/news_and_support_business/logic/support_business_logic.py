@@ -1,10 +1,10 @@
 from fastapi import HTTPException, Request, Depends
-from ml.manager.managers import BusinessSupportManager, TagsManager
+from news_and_support_business.manager.managers import BusinessSupportManager, TagsManager
 from profile.controllers.profile_conrollers import manager
 from profile.schemas import GetProfile
 from datetime import datetime
 import locale
-from ml.manager.managers import BusinessSupportManager
+from news_and_support_business.manager.managers import BusinessSupportManager
 
 # Устанавливаем русскую локаль
 locale.setlocale(locale.LC_TIME, "ru_RU.UTF-8")

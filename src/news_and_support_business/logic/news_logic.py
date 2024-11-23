@@ -5,11 +5,11 @@ from bs4 import BeautifulSoup
 from fastapi import HTTPException, Request
 from fastapi.params import Depends
 
-from ml.manager.managers import NewsManager, TagsManager
+from news_and_support_business.manager.managers import NewsManager, TagsManager
 from profile.schemas import GetProfile
 from datetime import datetime
 import locale
-from ml.models.models import News
+from news_and_support_business.models.models import News
 from settings import parser
 
 

@@ -4,12 +4,30 @@ meta {
   seq: 4
 }
 
-post {
-  url: 127.0.0.1:8000/profile/new_profile
-  body: none
+patch {
+  url: 127.0.0.1:8000/business/business_form
+  body: json
   auth: bearer
 }
 
+headers {
+  Refresh-Token: eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiYWRtaW4iLCJ0b2tlbl90eXBlIjoiQWNjZXNzLVRva2VuIiwiZXhwaXJlIjoiMjAyNC0xMS0yM1QxNTowMjo1NC4xODIzMTcrMDA6MDAifQ.NrGhFzBF0So1q3b3JJKpm9qWAT_uyg-eXiDr-9OfKfsfRGmfvuAZ3mng5VjO1sS4f6Vhba8YsoijKynEVzENTGfP6XCnBkA_qu8BtRw4IIbqKx4mrMzm3VN8C1PqwBVkga67Up9A42pJBrFK86HBzWT8bTIZImfia3caj9O2ic-RQWdApioDacCBr7UIU1GYy9C4zxC1Ybefvx0zrKhqADXgOip80oxen_KORLIGbBJZm674bBX5012OD0RK94cS5ZB1wKi7ysCDOwe4efCSxVKusY0AZYtAv_sFhNd9daOH_tkD7-fzKuGq0N6uOiO8TB96om96T-s_wt_BAjYoQw
+}
+
 auth:bearer {
-  token: eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiYWRtaW4iLCJ0b2tlbl90eXBlIjoiQWNjZXNzLVRva2VuIiwiZXhwaXJlIjoiMjAyNC0xMS0yMVQxNDo0OTo1Mi45MTk3OTkrMDA6MDAifQ.rYmlxh3GhlNBPcT4DpWePUj4RKpGgynmbbntTAEwGm87a8X7-RMtpAa8iZQBo0RPUMy5UKjteM91I9kUrIG28eAyganNBIt8Dj7z94NZlV-csJc5qhhrfRGggIsnLqfEZ4aCpd7lj-llC5brbbALuRmixhpuEhz203tRV7uxL59voNgJxZtPANcFRjnlbfOEyhIlgYDU-HAKiu1O8oV7g3mD0scqwZyoowHPG4Ydx_434qAVcN2z2D7ig4MGYE8v-DuEVsp33OoXc7cP56-eyFgqm_FHM6E47Hxq3odZYI-lVFkre_8-HFnBleZ4fLk6C4TX03R8FgNiVxJHBr3TfA
+  token: eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiYWRtaW4iLCJ0b2tlbl90eXBlIjoiQWNjZXNzLVRva2VuIiwiZXhwaXJlIjoiMjAyNC0xMS0yM1QxNTowMjo1NC4xODIzMTcrMDA6MDAifQ.NrGhFzBF0So1q3b3JJKpm9qWAT_uyg-eXiDr-9OfKfsfRGmfvuAZ3mng5VjO1sS4f6Vhba8YsoijKynEVzENTGfP6XCnBkA_qu8BtRw4IIbqKx4mrMzm3VN8C1PqwBVkga67Up9A42pJBrFK86HBzWT8bTIZImfia3caj9O2ic-RQWdApioDacCBr7UIU1GYy9C4zxC1Ybefvx0zrKhqADXgOip80oxen_KORLIGbBJZm674bBX5012OD0RK94cS5ZB1wKi7ysCDOwe4efCSxVKusY0AZYtAv_sFhNd9daOH_tkD7-fzKuGq0N6uOiO8TB96om96T-s_wt_BAjYoQw
+}
+
+body:json {
+  {
+    "buisness_form": "ыыы",
+    "form_of_ownership": null,
+    "size_shape": null,
+    "industry_form": null,
+    "geographical_coverage": null,
+    "type_of_clients": null,
+    "nature_of_the_organization": null,
+    "life_cycle": null,
+    "form_description": null
+  }
 }

@@ -1,20 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 
-from ml.schemas import RibbonNewsSchema, FilterTagSchema, TagsSchema, ResponseNewsSchema, NewsSchema, CreateTagSchema
-from ml.manager.managers import NewsManager, TagsManager
+from news_and_support_business.schemas import RibbonNewsSchema, FilterTagSchema, TagsSchema, ResponseNewsSchema, NewsSchema, CreateTagSchema
+from news_and_support_business.manager.managers import NewsManager, TagsManager
 
 router_news = APIRouter(prefix="/news", tags=["News"])
 
 
 @router_news.get("/all_news")
-async def get_all_news(tag_names: list[str] | None = Query(None),  news_manager: NewsManager = Depends(NewsManager)):
+async def get_all_news(tag_names: list[str] | None = Query(None), order_by: bool | None = Query(None),  news_manager: NewsManager = Depends(NewsManager)):
     """
     Получить всю ленту новостей вместе с тегами.
     """
     if not tag_names:
-        news_with_tags = await news_manager.get_all_news_with_tags()
+        news_with_tags = await news_manager.get_all_news_with_tags(order_by_date=order_by)
     else:
-        news_with_tags = await news_manager.get_news_by_tags(tag_names)
+        news_with_tags = await news_manager.get_news_by_tags(tag_names, order_by)
 
 
     ribbon = RibbonNewsSchema(ribbon=[ResponseNewsSchema(news=NewsSchema(news_id=news.id,

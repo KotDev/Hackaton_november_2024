@@ -45,8 +45,7 @@ class BusinessFormSchema(BaseModel):
     life_cycle: Optional[str] = None
     form_description: Optional[str] = None
 
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 class UpdateBusinessFormSchema(BaseModel):
     buisness_form: Optional[str] = None
