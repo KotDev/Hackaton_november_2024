@@ -13,7 +13,7 @@ import logging
 from middlewares import PrometheusMiddleware
 from database import Base
 from authorization.models.model import User
-from profile.models.model import Profile, Photo
+from profile.models.model import Profile, Photo, BuisnessForm
 from ml.models.models import BuisnessSupport, News, Tag
 from apscheduler.triggers.cron import CronTrigger
 from pars_news import run_parsing_news
@@ -23,6 +23,8 @@ from ml.controllers.news_controllers import router_news
 from ml.controllers.supprot_business_controllers import router_support_business
 from ml.logic.news_logic import NewsLogic
 from ml.logic.support_business_logic import BusinessSupportLogic
+from profile.controllers.buisness_form_controllers import business_form_router
+
 
 LOG_COUNT: Counter = Counter(
     "log_messages_total",
@@ -72,6 +74,7 @@ app.add_middleware(PrometheusMiddleware)
 app.include_router(auth_router)
 app.include_router(profile_router)
 app.include_router(router_news)
+app.include_router(business_form_router)
 app.include_router(router_support_business)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

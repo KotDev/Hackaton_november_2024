@@ -17,9 +17,27 @@ class ProfileManagerInterface(ABC):
         pass
 
     @abstractmethod
-    async def add_profile(self, user_id: int, schema: ProfileSchema):
+    async def add_profile(self, user_id: int):
         pass
 
+
+class BusinessFormManagerInterface(ABC):
+
+    @abstractmethod
+    async def get_business_form(self, business_form_id: int | None, **kwargs):
+        pass
+
+    @abstractmethod
+    async def update_business_form(self, business_form_id: int | None, update_data: dict, **kwargs):
+        pass
+
+    @abstractmethod
+    async def delete_business_form(self, business_form_id: int | None, **kwargs):
+        pass
+
+    @abstractmethod
+    async def add_business_form(self, profile_id: int, schema: BusinessFormSchema):
+        pass
 
 class PhotoManagerInterface(ABC):
 

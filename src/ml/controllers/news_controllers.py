@@ -34,11 +34,3 @@ async def get_tags(tags_manager: TagsManager = Depends(TagsManager)):
     return FilterTagSchema(tags_filter=[TagsSchema(tag_id=tag.id, name=tag.name) for tag in tags] if tags else [])
 
 
-@router_news.post("/create_tag")
-async def create_tag_for_news(schema = CreateTagSchema, tags_manager: TagsManager = Depends(TagsManager)):
-    """
-    Создать тег для новостей.
-    """
-    tag = await tags_manager.add_tag(schema.name)
-    return TagsSchema(tag_id=tag.id, tag_name=tag.name)
-

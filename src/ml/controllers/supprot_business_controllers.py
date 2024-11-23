@@ -9,9 +9,6 @@ router_support_business = APIRouter(prefix="/business_support", tags=["BusinessS
 async def request_ml(schema: ResponseProfileSchema=ResponseProfileSchema) -> BusinessSupportTagSchema:
     pass
 
-@router_support_business.post("/create_tag_business_support")
-async def create_tag_for_support_business(schema: CreateTagBusinessSupportSchema = CreateTagBusinessSupportSchema):
-    pass
 
 @router_support_business.get("/all_business_support")
 async def get_all_business_support() -> BusinessSupportTagSchema:

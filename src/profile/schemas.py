@@ -35,7 +35,21 @@ class ProfileSchema(BaseModel):
 
 
 class BusinessFormSchema(BaseModel):
-    id: int
+    profile_id: int
+    buisness_form: Optional[str] = None
+    form_of_ownership: Optional[str] = None
+    size_shape: Optional[str] = None
+    industry_form: Optional[str] = None
+    geographical_coverage: Optional[str] = None
+    type_of_clients: Optional[str] = None
+    nature_of_the_organization: Optional[str] = None
+    life_cycle: Optional[str] = None
+    form_description: Optional[str] = None
+
+    class Config:
+        orm_mode = True
+
+class UpdateBusinessFormSchema(BaseModel):
     buisness_form: Optional[str] = None
     form_of_ownership: Optional[str] = None
     size_shape: Optional[str] = None
@@ -54,7 +68,6 @@ class ResponseProfileSchema(BaseModel):
     profile_id: int
     email: str
     profile: ProfileSchema
-    business_forms: BusinessFormSchema
 
 
 class GetProfile(BaseModel):

@@ -1,5 +1,5 @@
 from fastapi import HTTPException, Request, Depends
-from ml.manager.managers import BusinessSupportManager
+from ml.manager.managers import BusinessSupportManager, TagsManager
 from profile.controllers.profile_conrollers import manager
 from profile.schemas import GetProfile
 from datetime import datetime
@@ -50,6 +50,27 @@ class BusinessSupportLogic:
                 return datetime.strptime(date_str_fixed, "%d %B %Y %H:%M")
             except ValueError as e:
                 raise ValueError(f"Ошибка преобразования даты: {str(e)}")
+
+
+    @staticmethod
+    async def generate_ml_tag_for_business_support():
+        manager_business_support = BusinessSupportManager()
+        manager_tags = TagsManager()
+        add_tags = []
+        business_supports = await manager_business_support.get_business_supports_with_not_tags()
+        if not business_supports:
+            return
+        for bs in business_supports:
+            ## функция мл которая возвращаеи тег
+            tags = []
+            for tag in tags:
+                if tag == "UnvariantText":
+                    await manager_business_support.delete_business_support(support_id=bs.id)
+                tag = await manager_tags.add_tag(tag)
+                add_tags.append(tag.name)
+            await manager_business_support.add_tags_to_support(support_id=bs.id, tags=add_tags)
+
+
 
     @staticmethod
     def get_user(request: Request) -> GetProfile:

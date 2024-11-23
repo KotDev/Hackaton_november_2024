@@ -20,14 +20,14 @@ class ProfileManager(DataBase, ProfileManagerInterface):
     async def update_profile(self, profile_id: int | None, update_data: dict, **kwargs):
         return await self.update_obj(profile_id, Profile, update_data, **kwargs)
 
-    async def add_profile(self, user_id: int, schema: ProfileSchema):
+    async def add_profile(self, user_id: int):
         async  with self.async_session() as session:
-            data = schema.model_dump()
-            data["profile_id"] = user_id
-            profile = Profile(**data)
+            profile = Profile(profile_id=user_id)
             session.add(profile)
             await session.commit()
         return profile
+
+
 
 
     async def get_full_data_profile(self, profile_id: Optional[int] = None, **kwargs):
@@ -43,12 +43,32 @@ class ProfileManager(DataBase, ProfileManagerInterface):
                 select(Profile)
                 .options(
                     joinedload(Profile.user),
-                    joinedload(Profile.buisness_forms),
                 )
                 .filter(*filters)
             )
             result = await session.execute(query)
             return result
+
+
+class BusinessFormManager(DataBase, BusinessFormManagerInterface):
+    def __init__(self):
+        super().__init__()
+
+    async def get_business_form(self, business_form_id: int | None, **kwargs):
+        return await self.get_obj(business_form_id, BuisnessForm, **kwargs)
+
+    async def delete_business_form(self, business_form_id: int | None, **kwargs):
+        return await self.delete_obj(business_form_id, BuisnessForm, **kwargs)
+
+    async def update_business_form(self, business_form_id: int | None, update_data: dict, **kwargs):
+        return await self.update_obj(business_form_id, BuisnessForm, update_data, **kwargs)
+
+    async def add_business_form(self, profile_id: int):
+        async with self.async_session() as session:
+            business_form = BuisnessForm(buisness_id=profile_id)
+            session.add(business_form)
+            await session.commit()
+        return business_form
 
 
 class PhotoManager(DataBase, PhotoManagerInterface):
