@@ -128,7 +128,6 @@ class BaseManager(DataBase):
     async def clear_models(self) -> None:
         async with self.engine.begin() as conn:
             await conn.run_sync(self.base.metadata.drop_all)
-            await conn.run_sync(self.base.metadata.create_all)
 
     async def init_models(self) -> None:
         async with self.engine.begin() as conn:
