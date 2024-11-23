@@ -4,6 +4,7 @@ import React from "react";
 import { Input } from "./input";
 import { Button } from "./button";
 import { useAuthForm } from "@/store/store";
+import { api } from "@/Api/Auth/route";
 
 interface Props {
   className?: string;
@@ -11,6 +12,19 @@ interface Props {
 
 export const SignInForm = ({ className }: Props) => {
   const { setActiveForm } = useAuthForm((state) => state);
+  const [emailValue, setEmailValue] = React.useState<string>("");
+  const [passlValue, setPasslValue] = React.useState<string>("");
+  const [reqPassValue, setReqPassValue] = React.useState<string>("");
+
+  const clickHandler = () => {
+    const userData = {
+      email: emailValue,
+      password: passlValue,
+      reqpassword: reqPassValue,
+    };
+    api.post("/auth/register", userData);
+  };
+
   return (
     <div
       className={cn(
@@ -23,11 +37,34 @@ export const SignInForm = ({ className }: Props) => {
           РЕгестрация
         </h5>
         <div className="flex flex-col gap-3 mb-10">
-          <Input type="email" placeholder="Введите почту" />
-          <Input type="password" placeholder="Введите пароль" />
-          <Input type="password" placeholder="Введите пароль" />
+          <Input
+            value={emailValue}
+            onChange={({ target }) => setEmailValue(target.value)}
+            required={true}
+            type="email"
+            placeholder="Введите почту"
+          />
+          <Input
+            value={passlValue}
+            onChange={({ target }) => setPasslValue(target.value)}
+            required={true}
+            type="password"
+            placeholder="Введите пароль"
+          />
+          <Input
+            value={reqPassValue}
+            onChange={({ target }) => setReqPassValue(target.value)}
+            required={true}
+            type="password"
+            placeholder="Введите пароль"
+          />
         </div>
-        <Button type="submit" variant={"outline"} className="w-full">
+        <Button
+          onClick={clickHandler}
+          type="button"
+          variant={"outline"}
+          className="w-full"
+        >
           Зарегестрироваться
         </Button>
         <button

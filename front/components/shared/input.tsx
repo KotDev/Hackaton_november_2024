@@ -9,12 +9,18 @@ interface Props {
   type: string;
   children?: React.ReactElement | string;
   placeholder?: string;
+  required?: boolean;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const Input = ({
   className,
   children,
   placeholder,
+  value,
+  onChange,
+  required = false,
   type = "text",
 }: Props) => {
   const [isVisible, setIsVisible] = React.useState<boolean>(false);
@@ -35,6 +41,9 @@ export const Input = ({
         />
       )}
       <input
+        onChange={onChange}
+        value={value}
+        required={required}
         className="outline-none bg-secondary"
         placeholder={placeholder}
         type={!isVisible ? type : "text"}
