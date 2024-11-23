@@ -25,7 +25,9 @@ export const ElementCard = ({ className }: Props) => {
         </h3>
         <p className="text-gray-100 ">22.11.2024</p>
       </div>
-      <Button variant={"default"}>Подробнее</Button>
+      <Button type={"button"} variant={"default"}>
+        Подробнее
+      </Button>
     </div>
   );
 };

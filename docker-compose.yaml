@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.8"
 
 networks:
   work_network:
@@ -47,14 +47,14 @@ services:
       - work_network
 
   grafana:
-      image: grafana/grafana:latest
-      container_name: grafana
-      environment:
-        - GF_SECURITY_ADMIN_PASSWORD=admin
-      ports:
-        - "3000:3000"
-      networks:
-        - work_network
+    image: grafana/grafana:latest
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - "3000:3000"
+    networks:
+      - work_network
 
   app:
     build:
@@ -67,16 +67,5 @@ services:
       - ./src_data
     environment:
       - PYTHONUNBUFFERED=1
-    networks:
-      - work_network
-
-  nginx:
-    image: nginx:latest
-    container_name: nginx_front
-    ports:
-      - "80:80"
-    volumes:
-      - ./front:/app/static
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
     networks:
       - work_network

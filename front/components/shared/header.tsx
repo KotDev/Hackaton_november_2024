@@ -20,10 +20,10 @@ export const Header = ({ className }: Props) => {
           </h2>
         </div>
         <div className="flex items-center gap-6">
-          <Button className="w-[200px]" variant={"secondary"}>
+          <Button type="button" className="w-[200px]" variant={"secondary"}>
             Регистрация
           </Button>
-          <Button className="w-[200px]" variant={"secondary"}>
+          <Button type="button" className="w-[200px]" variant={"secondary"}>
             Вход
           </Button>
         </div>
