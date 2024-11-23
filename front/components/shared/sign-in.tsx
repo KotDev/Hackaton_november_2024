@@ -16,8 +16,7 @@ export const SignInForm = ({ className }: Props) => {
   const [passlValue, setPasslValue] = React.useState<string>("");
   const [reqPassValue, setReqPassValue] = React.useState<string>("");
 
-  const submitHandler = async (e: React.FormEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const submitHandler = async () => {
     const userData = {
       email: emailValue,
       password: passlValue,
@@ -31,6 +30,7 @@ export const SignInForm = ({ className }: Props) => {
     } catch (err) {
       console.error(err);
     }
+    console.log(1);
   };
 
   return (
@@ -68,7 +68,7 @@ export const SignInForm = ({ className }: Props) => {
           />
         </div>
         <Button
-          onSubmit={submitHandler}
+          onClick={submitHandler}
           type="button"
           variant={"outline"}
           className="w-full"
