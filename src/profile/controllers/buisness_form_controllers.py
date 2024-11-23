@@ -12,7 +12,7 @@ business_form_router = APIRouter(prefix="/business_form", tags=["BusinessForm"])
 async def get_business_form(
     profile: GetProfile = Depends(ProfileLogic.get_user), manager: BusinessFormManager = Depends(BusinessFormManager)
 ):
-    business_form = await manager.get_business_form(business_id=profile.profile_id)
+    business_form = await manager.get_business_form(business_form_id=profile.profile_id)
     return BusinessFormSchema.model_validate(business_form)
 
 @business_form_router.post("/business_form")

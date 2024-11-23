@@ -3,7 +3,7 @@ from sqlalchemy.orm import joinedload
 
 from database import DataBase
 from .managers_interfaces import *
-from profile.models.model import *
+from profile.models.model import BuisnessForm, Profile, Photo
 from ..schemas import *
 
 
@@ -65,7 +65,7 @@ class BusinessFormManager(DataBase, BusinessFormManagerInterface):
 
     async def add_business_form(self, profile_id: int):
         async with self.async_session() as session:
-            business_form = BuisnessForm(buisness_id=profile_id)
+            business_form = BuisnessForm(business_id=profile_id)
             session.add(business_form)
             await session.commit()
         return business_form

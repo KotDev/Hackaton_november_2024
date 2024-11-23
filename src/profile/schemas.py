@@ -30,8 +30,7 @@ class ProfileSchema(BaseModel):
             raise ValueError("Age must be between 18 and 100")
         return value
 
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 
 class BusinessFormSchema(BaseModel):
@@ -60,8 +59,7 @@ class UpdateBusinessFormSchema(BaseModel):
     life_cycle: Optional[str] = None
     form_description: Optional[str] = None
 
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 
 class ResponseProfileSchema(BaseModel):

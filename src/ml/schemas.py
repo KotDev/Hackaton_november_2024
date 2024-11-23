@@ -45,6 +45,7 @@ class FilterTagSchema(BaseModel):
 class BusinessSupportSchema(BaseModel):
     id: int
     name: str
+    description: str
     date_start: datetime
     date_end: datetime
     link: str

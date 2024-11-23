@@ -36,7 +36,7 @@ class BusinessFormManagerInterface(ABC):
         pass
 
     @abstractmethod
-    async def add_business_form(self, profile_id: int, schema: BusinessFormSchema):
+    async def add_business_form(self, profile_id: int):
         pass
 
 class PhotoManagerInterface(ABC):
