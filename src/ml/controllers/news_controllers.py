@@ -42,3 +42,5 @@ async def create_tag_for_news(tag_name: str, tags_manager: TagsManager = Depends
     """
     tag = await tags_manager.add_tag(tag_name)
     return {"tag_id": tag.id, "name": tag.name}
+
+

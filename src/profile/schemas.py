@@ -64,3 +64,5 @@ class PhotoSchema(BaseModel):
     profile_id: int
     photo_type: str
     photo_path: str
+
+
