@@ -1,5 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
-from setuptools.extern import names
+# from setuptools.extern import names
+
+from setuptools import *
+
 
 from ml.schemas import RibbonNewsSchema, FilterTagSchema, TagsSchema, ResponseNewsSchema, NewsSchema
 from ml.manager.managers import NewsManager, TagsManager

@@ -1,6 +1,6 @@
 import re
 from time import sleep
-from typing import Any, Self
+from typing import Any
 
 from pydantic import BaseModel, model_validator, ValidationError, field_validator
 from datetime import datetime

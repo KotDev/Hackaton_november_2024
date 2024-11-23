@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, Asyn
 from redis import Redis
 from settings import database, redis, settings
 from sqlalchemy.orm import declarative_base
+from typing import Union
 
 
 class DataBase:
@@ -59,7 +60,7 @@ class DataBase:
             return primary_key_columns[0].key
         raise ValueError(f"Model {model.__name__} has no primary key defined.")
 
-    async def delete_obj(self, id_obj: int | None, obj, **kwargs):
+    async def delete_obj(self, id_obj: Union[int, None], obj, **kwargs):
         """
         Удаляет объект из бд id_obj - первичный ключ obj - Таблица, **kwargs - параметры фильтра для удаления
         :param id_obj:
@@ -76,7 +77,7 @@ class DataBase:
                 await session.delete(object_model)
             await session.commit()
 
-    async def update_obj(self, id_obj: int | None, obj, update_data: dict, **kwargs):
+    async def update_obj(self, id_obj: Union[int, None], obj, update_data: dict, **kwargs):
         """
         Удаляет объект из бд id_obj - первичный ключ obj - Таблица, **kwargs - параметры фильтра для обновления
         update_data - словарь полей объекта и его новых значений
@@ -100,7 +101,7 @@ class DataBase:
             await session.commit()
             return objects
 
-    async def get_obj(self, id_obj: int | None, obj, **kwargs):
+    async def get_obj(self, id_obj: Union[int, None], obj, **kwargs):
         """
         Удаляет объект из бд id_obj - первичный ключ obj - Таблица,
         **kwargs - параметры фильтра для получения объекта из бд
