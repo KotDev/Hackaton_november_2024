@@ -1,7 +1,6 @@
 import React from "react";
 import { Button } from "./button";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 
 interface ICategory {
   tag_id: number;
@@ -14,7 +13,7 @@ interface ICard {
   date?: string;
   news_id: number;
   tags?: ICategory[];
-  link?: URL;
+  link: string;
 }
 
 interface Props extends ICard {
@@ -26,7 +25,6 @@ export const ElementCard = ({
   title,
   description,
   date,
-  news_id,
   tags,
   link,
 }: Props) => {
@@ -40,22 +38,19 @@ export const ElementCard = ({
       )}
     >
       <div className="flex flex-col gap-4">
-        <div className="max-w-[90%]">
+        <div className="max-w-[90%] flex gap-1">
           {tags?.map((e) => (
             <p
-              key={e.tag_id}
+              key={e.tag_id + "tag"}
               className="lowercase font-medium text-primary text-sm border-primary border w-max px-2 py-[2px] rounded-md"
             >
               {e.name}
             </p>
           ))}
         </div>
-        <Link
-          href={link || `#${news_id}`}
-          className="text-white font-semibold text-2xl"
-        >
+        <a href={link} className="text-white font-semibold text-2xl">
           {title}
-        </Link>
+        </a>
         <p className="text-gray-100 ">{date}</p>
       </div>
       {isActive && <div className="">{description}</div>}

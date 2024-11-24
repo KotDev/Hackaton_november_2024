@@ -23,7 +23,7 @@ interface ICard {
   date?: string;
   news_id: number;
   tags?: ICategory[];
-  link?: URL;
+  link: string;
 }
 
 // interface QueryFilters {
@@ -51,6 +51,7 @@ export default function Home() {
       .get("/news/all_news")
       .then((response) => {
         setArticleData(response.data.ribbon);
+        console.log(response.data.ribbon);
       })
       .catch((err) => console.error(err));
   }, []);
@@ -76,7 +77,7 @@ export default function Home() {
                 date={e.date}
                 description={e.description}
                 tags={e.tags}
-                key={e.news_id}
+                key={e.news_id + "_article"}
               />
             ))}
           </Container>
