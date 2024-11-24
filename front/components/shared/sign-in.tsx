@@ -3,8 +3,8 @@ import { cn } from "@/lib/utils";
 import React from "react";
 import { Input } from "./input";
 import { Button } from "./button";
-import { useAuthForm, useProfileInfo } from "@/store/store";
-import { api } from "@/Api/Auth/route";
+import { useAuthForm } from "@/store/store";
+//import { api } from "@/Api/Auth/route";
 
 interface Props {
   className?: string;
@@ -15,29 +15,27 @@ export const SignInForm = ({ className }: Props) => {
   const [emailValue, setEmailValue] = React.useState<string>("");
   const [passlValue, setPasslValue] = React.useState<string>("");
   const [reqPassValue, setReqPassValue] = React.useState<string>("");
-  const { setProfileInfo } = useProfileInfo((state) => state);
 
-  const submitHandler = async () => {
-    const userData = {
-      email: emailValue,
-      password: passlValue,
-      password_verification: reqPassValue,
-      role: "user",
-    };
-    try {
-      const response = await api.post("/auth/register", userData);
-      const data = await response.data;
-      if (typeof window !== "undefined") {
-        localStorage.setItem("tokens", data);
-      }
-      console.log(localStorage);
-      setProfileInfo(data);
-      setActiveForm("profile");
-    } catch (err) {
-      console.error(err);
-    }
-    console.log(1);
-  };
+  // const submitHandler = async () => {
+  //   const userData = {
+  //     email: emailValue,
+  //     password: passlValue,
+  //     password_verification: reqPassValue,
+  //     role: "user",
+  //   };
+  //   try {
+  //     const response = await api.post("/auth/register", userData);
+  //     const data = await response.data;
+  //     if (typeof window !== "undefined") {
+  //       localStorage.setItem("tokens", data);
+  //     }
+  //     console.log(localStorage);
+  //     setProfileInfo(data);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  //   setActiveForm("profile");
+  // };
 
   return (
     <div
@@ -73,12 +71,7 @@ export const SignInForm = ({ className }: Props) => {
             placeholder="Введите пароль"
           />
         </div>
-        <Button
-          onClick={submitHandler}
-          type="button"
-          variant={"outline"}
-          className="w-full"
-        >
+        <Button type="button" variant={"outline"} className="w-full">
           Зарегестрироваться
         </Button>
         <button

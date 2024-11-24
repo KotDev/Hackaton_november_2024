@@ -21,7 +21,7 @@ export const Button = ({
   const styleRender = (variant: Props["variant"]) => {
     switch (variant) {
       case "default":
-        return;
+        return "w-min";
       case "outline":
         return "px-6 font-semibold py-3 bg-none border-2 border-primary text-primary hover:bg-primary hover:text-white";
       case "secondary":
