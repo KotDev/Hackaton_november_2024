@@ -33,7 +33,10 @@ export const Categories = ({ className }: Props) => {
 
   return (
     <div
-      className={cn("inline-flex bg-gray-100 p-1 rounded-2xl z-10", className)}
+      className={cn(
+        "inline-flex bg-gray-100 p-1 rounded-2xl z-10 overflow-x-scroll max-w-[50%]",
+        className
+      )}
     >
       {category.length > 0 &&
         category?.map((e) => (

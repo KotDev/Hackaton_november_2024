@@ -1,6 +1,6 @@
 import React from "react";
-import { Button } from "./button";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 interface ICategory {
   tag_id: number;
@@ -34,8 +34,8 @@ export const ElementCard = ({ className, news, tags }: Props) => {
         className
       )}
     >
-      <div className="flex flex-col gap-4">
-        <div className="max-w-[90%] flex gap-1">
+      <div className="flex flex-col gap-4 relative group">
+        <div className="max-w-[80%] s overflow-x-scroll flex gap-1">
           {tags?.map((e) => (
             <p
               key={e.tag_id + "tag"}
@@ -53,13 +53,13 @@ export const ElementCard = ({ className, news, tags }: Props) => {
       {isActive && (
         <div className="text-white font-normal text-sm">{news.description}</div>
       )}
-      <Button
-        type={"button"}
-        variant={"default"}
+      <Link
         onClick={() => setIsActive(!isActive)}
+        href={`/#${news.title}`}
+        className="text-black bg-white border-white font-medium text-lg px-4 py-2 hover:bg-black hover:text-white transition duration-200"
       >
         Подробнее
-      </Button>
+      </Link>
     </div>
   );
 };
