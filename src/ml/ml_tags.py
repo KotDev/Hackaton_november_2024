@@ -292,5 +292,4 @@ class BERTClass(torch.nn.Module):
         """
         return tags
 
-
 model = BERTClass(False, tokenizer, THRESHOLD)

@@ -8,7 +8,7 @@ MEDIA_PROFILE_PATH = str(BASE_DIR / "profile" / "static" / "media")
 
 #-------------DB------------------------------------------
 class DataBaseSettings(BaseModel):
-    url_db: str = "postgresql+asyncpg://root:root@localhost:5436/hakaton_api"
+    url_db: str = "postgresql+asyncpg://root:root@hakaton_db:5432/hakaton_api"
     echo: bool = True
     expire_on_commit: bool = False
     autocommit: bool = False
@@ -41,8 +41,8 @@ class MiddleWareSettings(BaseModel):
 #-------------RedisSettings-----------------------------------------
 
 class RedisSettings(BaseModel):
-    host: str = "127.0.0.1"
-    port: int = 6380
+    host: str = "hakaton_redis"
+    port: int = 6379
     db: int = 0
     decode_responses: bool = True
 

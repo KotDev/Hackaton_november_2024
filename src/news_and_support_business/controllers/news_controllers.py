@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
+from ml.llm_model import summarize_text
 
 from news_and_support_business.logic.news_logic import NewsLogic
 from news_and_support_business.schemas import RibbonNewsSchema, FilterTagSchema, TagsSchema, ResponseNewsSchema, NewsSchema, CreateTagSchema
@@ -21,7 +22,7 @@ async def get_all_news(tag_names: list[str] | None = Query(None), order_by: bool
 
     ribbon = RibbonNewsSchema(ribbon=[ResponseNewsSchema(news=NewsSchema(news_id=news.id,
                                                                          title=news.title,
-                                                                         description= await NewsLogic.pars_news_info(news),
+                                                                         description= summarize_text(await NewsLogic.pars_news_info(news)),
                                                                          date=news.date),
                                 tags=[TagsSchema(tag_id=tag.id, name=tag.name) for tag in news.tags]
                                 if news.tags else []) for news in news_with_tags] if news_with_tags else [])
