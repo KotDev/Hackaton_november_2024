@@ -50,7 +50,7 @@ export default function Home() {
     api
       .get("/news/all_news")
       .then((response) => {
-        setArticleData(response.data);
+        setArticleData(response.data.ribbon);
       })
       .catch((err) => console.error(err));
   }, []);
@@ -67,24 +67,26 @@ export default function Home() {
       <Top ref={interSectionRef} />
       <Setting />
       {articleElements.length > 0 && (
-        <Container className="grid grid-cols-2 gap-16 mt-[120px]">
-          {articleElements.map((e, _) => (
-            <ElementCard
-              news_id={e.news_id}
-              link={e.link}
-              date={e.date}
-              description={e.description}
-              tags={e.tags}
-              key={e.news_id}
-            />
-          ))}
-        </Container>
+        <>
+          <Container className="grid grid-cols-2 gap-16 mt-[120px]">
+            {articleElements.map((e, _) => (
+              <ElementCard
+                news_id={e.news_id}
+                link={e.link}
+                date={e.date}
+                description={e.description}
+                tags={e.tags}
+                key={e.news_id}
+              />
+            ))}
+          </Container>
+          <Container className="flex justify-center my-[120px]">
+            <Button variant="secondary" className={"dark"}>
+              Показать еще
+            </Button>
+          </Container>
+        </>
       )}
-      <Container className="flex justify-center my-[120px]">
-        <Button variant="secondary" className={"dark"}>
-          Показать еще
-        </Button>
-      </Container>
       <Footer />
       <AuthForm />
     </div>

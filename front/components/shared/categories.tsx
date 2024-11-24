@@ -16,6 +16,7 @@ interface ICategory {
 
 export const Categories = ({ className }: Props) => {
   const activeCategory = useCategory((state) => state.activeCategory);
+  const [isLoad, setIsLoad] = React.useState<boolean>(false);
 
   const [category, setCategory] = React.useState<ICategory[]>([]);
 
@@ -23,7 +24,9 @@ export const Categories = ({ className }: Props) => {
     api
       .get("/news/tags")
       .then((response) => {
-        setCategory(response.data);
+        setCategory(response.data.tags_filter);
+        setIsLoad(true);
+        console.log(response.data.tags_filter);
       })
       .catch((err) => console.error(err));
   }, []);
@@ -32,7 +35,7 @@ export const Categories = ({ className }: Props) => {
     <div
       className={cn("inline-flex bg-gray-100 p-1 rounded-2xl z-10", className)}
     >
-      {category.length > 0 ||
+      {category.length > 0 &&
         category?.map((e) => (
           <div
             className={cn(
