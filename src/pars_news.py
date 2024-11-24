@@ -28,30 +28,6 @@ async def run_parsing_news():
         last_height = await page.evaluate("document.body.scrollHeight")
         print(f"Initial page height: {last_height}")
 
-        keywords_pattern = re.compile(
-            r"\b("
-            # Бизнес, предпринимательство, компании
-            r"(бизнес|бизн|предприниматель|предпринимател|стартап|микробизнес|фирм|компан|организаци|"
-            r"корпорац|производств|индустри|экономик|проект|сектор|продукт|прибыл|доход|услуг|товар|"
-            r"рынк|платформа|инновац|производител|маркет|стартов|кредитор|коммерциализ|развити|капитал)[а-яё]*|"
-
-            # Поддержка, льготы, субсидии, гранты
-            r"(поддержк|субсиди|грант|дотаци|льгот|помощ|содейств|пособ|кредит|выгод|возмещен|снижен|"
-            r"ставк|каникул|финанс|софинансир|пособи|пошлин|налог|платеж|возврат|инвест|вклад|гарант|"
-            r"компенсац|выплат|стимул|сэконом|пожертв|награда|инвестици|проект|контракт|программа|платежи|"
-            r"мера|пошлины|государств|финансировани|государственн|федеральн|региональн)[а-яё]*|"
-
-            # Меры поддержки, программы, государственные инициативы
-            r"(государственн|федеральн|региональн|национальн|муниципальн|инновац|развит|помощ|програм[а-яё]*|"
-            r"инициатив|мера|реформа|стратег|предпринимател|экономическ|микробизнес|мал[а-яё]* бизнес|средн[а-яё]* бизнес|"
-            r"крупн[а-яё]* бизнес|финансировани[а-яё]* для бизнеса|государств|програм[а-яё]* помощи|поддержк[а-яё]*|"
-            r"налогов[а-яё]* каникулы|меры поддержки|субсидии для бизнеса|инвестиционные программы|государственное финансирование|"
-            r"помощь малому и среднему бизнесу|финансовая помощь предпринимателям|снижение налогов|финансирование стартапов|"
-            r"государственные меры поддержки|программы для предпринимателей|программы стимулирования)[а-яё]*"
-            r")\b",
-            re.IGNORECASE
-        )
-
         relevant_articles = []
 
         while scroll_count < MAX_SCROLLS:
@@ -76,11 +52,10 @@ async def run_parsing_news():
                 title = title_tag.get_text(strip=True) if title_tag else None
                 link_tag = title_tag.find("a") if title_tag else None
                 link = f"https://economy.gov.ru{link_tag['href']}" if link_tag else None
-                if title and re.search(keywords_pattern, title):
-                    date_tag = article.find("div", class_="e-date")
-                    date = date_tag.get_text(strip=True) if date_tag else "Дата не указана"
-                    if not any(news["link"] == link for news in relevant_articles):
-                        relevant_articles.append({"title": title, "date": date, "link": link})
+                date_tag = article.find("div", class_="e-date")
+                date = date_tag.get_text(strip=True) if date_tag else "Дата не указана"
+                if not any(news["link"] == link for news in relevant_articles):
+                    relevant_articles.append({"title": title, "date": date, "link": link})
 
             # Получаем новую высоту страницы и проверяем прокрутку
             new_height = await page.evaluate("document.body.scrollHeight")

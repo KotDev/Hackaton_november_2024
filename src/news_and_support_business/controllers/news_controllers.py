@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 
+from news_and_support_business.logic.news_logic import NewsLogic
 from news_and_support_business.schemas import RibbonNewsSchema, FilterTagSchema, TagsSchema, ResponseNewsSchema, NewsSchema, CreateTagSchema
 from news_and_support_business.manager.managers import NewsManager, TagsManager
 
@@ -17,9 +18,10 @@ async def get_all_news(tag_names: list[str] | None = Query(None), order_by: bool
         news_with_tags = await news_manager.get_news_by_tags(tag_names, order_by)
 
 
+
     ribbon = RibbonNewsSchema(ribbon=[ResponseNewsSchema(news=NewsSchema(news_id=news.id,
                                                                          title=news.title,
-                                                                         link=news.link,
+                                                                         description= await NewsLogic.pars_news_info(news),
                                                                          date=news.date),
                                 tags=[TagsSchema(tag_id=tag.id, name=tag.name) for tag in news.tags]
                                 if news.tags else []) for news in news_with_tags] if news_with_tags else [])

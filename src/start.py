@@ -1,5 +1,5 @@
 from contextlib import asynccontextmanager
-
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi import FastAPI
@@ -47,8 +47,10 @@ async def lifespan(app: FastAPI):
     await base_manager.init_models()
     data_news = await run_parsing_news()
     await NewsLogic.format_parse_data(parse_data=data_news)
+    await NewsLogic.generate_ml_tag_for_news()
     data_support = await run_parsing_support_business()
     await BusinessSupportLogic.format_data_parser(data_support)
+    await BusinessSupportLogic.generate_ml_tag_for_business_support()
     #scheduler.add_job(
     #    run_parsing_news,
     #    CronTrigger(hour=3, minute=0),  # Ежедневно в 03:00
@@ -73,6 +75,13 @@ app.add_middleware(PrometheusMiddleware)
 app.include_router(auth_router)
 app.include_router(profile_router)
 app.include_router(router_news)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3001"],  # Используйте точный домен и порт фронтенда
+    allow_credentials=True,
+    allow_methods=["*"],  # Разрешить все методы
+    allow_headers=["*"],  # Разрешить все заголовки
+)
 app.include_router(business_form_router)
 app.include_router(router_support_business)
 logging.basicConfig(level=logging.INFO)

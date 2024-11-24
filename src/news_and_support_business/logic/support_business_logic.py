@@ -1,10 +1,14 @@
 from fastapi import HTTPException, Request, Depends
+from sqlalchemy.util import await_only
+
 from news_and_support_business.manager.managers import BusinessSupportManager, TagsManager
 from profile.controllers.profile_conrollers import manager
 from profile.schemas import GetProfile
 from datetime import datetime
 import locale
 from news_and_support_business.manager.managers import BusinessSupportManager
+from ml.ml_tags import model as model_tag
+
 
 # Устанавливаем русскую локаль
 locale.setlocale(locale.LC_TIME, "ru_RU.UTF-8")
@@ -58,19 +62,53 @@ class BusinessSupportLogic:
         manager_tags = TagsManager()
         add_tags = []
         business_supports = await manager_business_support.get_business_supports_with_not_tags()
+
         if not business_supports:
             return
+
         for bs in business_supports:
-            ## функция мл которая возвращаеи тег
-            tags = []
-            for tag in tags:
-                if tag == "UnvariantText":
-                    await manager_business_support.delete_business_support(support_id=bs.id)
-                tag = await manager_tags.add_tag(tag)
-                add_tags.append(tag.name)
-            await manager_business_support.add_tags_to_support(support_id=bs.id, tags=add_tags)
+            tags = model_tag.analyze(bs.name, bs.description)
 
+            # Убедимся, что анализатор вернул строки
+            if not all(isinstance(tag, str) for tag in tags):
+                continue  # Пропускаем обработку, если теги некорректны
 
+            # Флаг для удаления новости
+            if "Нерелевантный" in tags:
+                await manager_business_support.delete_business_support(support_id=bs.id)
+                continue
+
+            existing_tags_ = []
+            for tg in tags:
+                existing_tags = await manager_tags.get_tag(tag_id=None, name=tg)
+                existing_tags = existing_tags.scalar()
+                existing_tags_.append(existing_tags)
+
+            existing_tag_names = {tag.name for tag in existing_tags_ if tag is not None}
+
+            # Добавляем только новые теги
+            new_tags = [tag for tag in tags if tag not in existing_tag_names]
+            if new_tags:
+                for t in new_tags:
+                    # Проверка на None перед добавлением нового тега
+                    if t is not None and t != "":
+                        new_tag = await manager_tags.add_tag(t)
+                        existing_tag_names.add(new_tag)
+
+            # Добавляем существующие теги, если они не равны None
+            for ex in existing_tags_:
+                if ex is not None:
+                    new_tags.append(ex)
+
+            # Убедимся, что теги имеют корректное значение (не None) перед добавлением
+            new_tags = [
+                tag.name if hasattr(tag, 'name') and tag.name is not None else tag
+                for tag in new_tags if tag is not None and tag != ""
+            ]
+
+            # Добавляем только новые теги, если они есть
+            if new_tags:
+                await manager_business_support.add_tags_to_support(support_id=bs.id, tags=new_tags)
 
     @staticmethod
     def get_user(request: Request) -> GetProfile:

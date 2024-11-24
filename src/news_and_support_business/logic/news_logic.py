@@ -5,12 +5,14 @@ from bs4 import BeautifulSoup
 from fastapi import HTTPException, Request
 from fastapi.params import Depends
 
+from ml.ml_tags import model
 from news_and_support_business.manager.managers import NewsManager, TagsManager
 from profile.schemas import GetProfile
 from datetime import datetime
 import locale
 from news_and_support_business.models.models import News
 from settings import parser
+from ml.ml_tags import model as model_tag
 
 
 class NewsLogic:
@@ -58,31 +60,50 @@ class NewsLogic:
 
         soup = BeautifulSoup(html_content, 'html.parser')
         content_section = soup.find('section', class_='e-material__content')
-        paragraphs = []
+        full_content = ""
         if content_section:
-            paragraphs = [p.get_text(strip=True) for p in content_section.find_all('p')]
+            # Объединяем все параграфы в одну строку с пробелами между ними
+            full_content = " ".join(p.get_text(strip=True) for p in content_section.find_all('p'))
 
-        return paragraphs
+        return full_content
 
     @staticmethod
     async def generate_ml_tag_for_news():
         manager_news = NewsManager()
         manager_tags = TagsManager()
-        add_tags = []
         news = await manager_news.get_news_with_not_tags()
         if not news:
             return
+
         for new in news:
             content = await NewsLogic.pars_news_info(new)
-            ## функция мл которая возвращаеи тег
-            tags = []
-            for tag in tags:
-                if tag == "UnvariantText":
-                    await manager_news.delete_news(news_id=new.id)
-                tag = await manager_tags.add_tag(tag)
-                add_tags.append(tag.name)
-            await manager_news.add_tags_to_news(news_id=new.id, tags=add_tags)
+            tags = model_tag.analyze(new.title, content)
 
+            # Убедимся, что анализатор вернул строки
+            if not all(isinstance(tag, str) for tag in tags):
+                continue  # Пропускаем обработку, если теги некорректны
+
+            # Флаг для удаления новости
+            if "Нерелевантный" in tags:
+                await manager_news.delete_news(news_id=new.id)
+                continue
+
+            # Получаем существующие теги
+            existing_tags_ = []
+            for tag in tags:
+                existing_tags = await manager_tags.get_tag(tag_id=None, name=tag)
+                existing_tags = existing_tags.scalar()
+                existing_tags_.append(existing_tags)
+            existing_tag_names = {tag.name for tag in existing_tags_ if tag is not None}
+
+            # Добавляем только новые теги
+            new_tags = [tag for tag in tags if tag not in existing_tag_names]
+            if new_tags:
+                for tg in new_tags:
+                    await manager_tags.add_tag(tg)
+
+            # Добавляем связи между новостью и тегами
+            await manager_news.add_tags_to_news(news_id=new.id, tags=tags)
 
     @staticmethod
     def get_user(request: Request) -> GetProfile:

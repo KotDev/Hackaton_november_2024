@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 
 from redis import Redis
@@ -59,21 +59,38 @@ class DataBase:
             return primary_key_columns[0].key
         raise ValueError(f"Model {model.__name__} has no primary key defined.")
 
+
     async def delete_obj(self, id_obj: int | None, obj, **kwargs):
-        """
-        Удаляет объект из бд id_obj - первичный ключ obj - Таблица, **kwargs - параметры фильтра для удаления
-        :param id_obj:
-        :param obj:
-        :param kwargs:
-        :return:
-        """
         async with self.async_session() as session:
-            objects = await self.get_obj(id_obj, obj, **kwargs)
-            objects = objects.scalars().all()
-            if not objects:
-                raise ValueError(f"{obj.__name__} is not found")
-            for object_model in objects:
-                await session.delete(object_model)
+            # Получаем имя первичного ключа
+            primary_key_field = DataBase.get_primary_key_field(obj)
+
+            if id_obj:
+                # Если id_obj передано, удаляем объект с этим id
+                result = await session.execute(
+                    select(obj).filter(getattr(obj, primary_key_field) == id_obj, **kwargs)
+                )
+                objects = result.scalars().all()
+                if not objects:
+                    raise ValueError(f"{obj.__name__} with {primary_key_field} {id_obj} not found")
+                # Прямое удаление
+                await session.execute(
+                    delete(obj).filter(getattr(obj, primary_key_field) == id_obj, **kwargs)
+                )
+            else:
+                # Если id_obj не передано, удаляем по другим фильтрам
+                result = await session.execute(
+                    select(obj).filter_by(**kwargs)
+                )
+                objects = result.scalars().all()
+                if not objects:
+                    raise ValueError(f"{obj.__name__} not found with filters {kwargs}")
+                # Прямое удаление
+                await session.execute(
+                    delete(obj).filter_by(**kwargs)
+                )
+
+            # Коммитим изменения в базе данных
             await session.commit()
 
     async def update_obj(self, id_obj: int | None, obj, update_data: dict, **kwargs):

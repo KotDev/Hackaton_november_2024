@@ -8,7 +8,7 @@ from pydantic import BaseModel, model_validator, ValidationError, field_validato
 class NewsSchema(BaseModel):
     news_id: int
     title: str
-    link: str
+    description: str
     date: datetime
 
     model_config = {"from_attributes": True}
