@@ -11,6 +11,7 @@ import React from "react";
 import { useIntersection } from "react-use";
 import { AuthForm } from "@/components/shared/auth";
 import { api } from "@/Api/Auth/route";
+import { useCategory, useSorting } from "@/store/store";
 
 interface ICategory {
   tag_id: number;
@@ -35,6 +36,7 @@ interface ICard {
 // }
 
 export default function Home() {
+  const { activeCategory } = useCategory((state) => state);
   const interSectionRef = React.useRef(null);
   const intersection = useIntersection(interSectionRef, {
     threshold: 0.4,
@@ -49,16 +51,22 @@ export default function Home() {
   }, [intersection?.isIntersecting]);
 
   const [articleElements, setArticleData] = React.useState<ICard[]>([]);
+  const { isUp } = useSorting((state) => state);
 
   React.useEffect(() => {
     api
-      .get("/news/all_news")
+      .get("/news/all_news", {
+        params: {
+          tag_names: activeCategory,
+          order_by: isUp,
+        },
+      })
       .then((response) => {
         setArticleData(response.data.ribbon);
         console.log(response.data.ribbon);
       })
       .catch((err) => console.error(err));
-  }, []);
+  }, [isUp, activeCategory]);
 
   return (
     <div className="">

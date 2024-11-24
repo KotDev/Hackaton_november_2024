@@ -1,8 +1,8 @@
 import { create } from "zustand";
 
 interface IUseCategory {
-  activeCategory: number[];
-  setActiveCategory: (value: number[]) => void;
+  activeCategory: string[];
+  setActiveCategory: (value: string[]) => void;
 }
 
 export const useCategory = create<IUseCategory>()((set) => ({
@@ -42,4 +42,14 @@ interface IUseBusinesInfo {
 export const useBusinesInfo = create<IUseBusinesInfo>((set) => ({
   info: {},
   setInfo: (value) => set(() => ({ info: value })),
+}));
+
+interface IUseSorting {
+  isUp: boolean;
+  setUp: (value: boolean) => void;
+}
+
+export const useSorting = create<IUseSorting>((set) => ({
+  isUp: false,
+  setUp: (value) => set(() => ({ isUp: value })),
 }));

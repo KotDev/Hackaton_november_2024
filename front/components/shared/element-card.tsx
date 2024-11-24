@@ -58,7 +58,7 @@ export const ElementCard = ({ className, news, tags }: Props) => {
       )}
       <Link
         onClick={() => setIsActive(!isActive)}
-        href={`/#${news.title}`}
+        href={`#`}
         className="text-black bg-white border-white font-medium text-lg px-4 py-2 hover:bg-black hover:text-white transition duration-200"
       >
         Подробнее

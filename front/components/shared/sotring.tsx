@@ -1,5 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
+import { useSorting } from "@/store/store";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import React from "react";
 
@@ -9,6 +10,11 @@ interface Props {
 
 export const Sorting = ({ className }: Props) => {
   const [sortUp, setSortUp] = React.useState<boolean>(true);
+  const { setUp } = useSorting((state) => state);
+
+  React.useEffect(() => {
+    setUp(sortUp);
+  }, [sortUp]);
 
   return (
     <div
