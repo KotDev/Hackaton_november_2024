@@ -35,7 +35,10 @@ export const ElementCard = ({ className, news, tags }: Props) => {
       )}
     >
       <div className="flex flex-col gap-4 relative group">
-        <div className="max-w-[80%] s overflow-x-scroll flex gap-1">
+        <div
+          className="max-w-[80%] s overflow-x-scroll flex gap-1"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
           {tags?.map((e) => (
             <p
               key={e.tag_id + "tag"}
