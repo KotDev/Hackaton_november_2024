@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import React from "react";
 import { useIntersection } from "react-use";
 import { AuthForm } from "@/components/shared/auth";
+import { api } from "@/Api/Auth/route";
 
 export default function Home() {
   const interSectionRef = React.useRef(null);
@@ -25,9 +26,34 @@ export default function Home() {
     } else setActiveHeader(true);
   }, [intersection?.isIntersecting]);
 
+  const [category, setCategory] = React.useState([]);
+
+  React.useEffect(() => {
+    api
+      .get("/news/tags")
+      .then((response) => {
+        setCategory(response.data);
+        console.log(response.data);
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
+  const [articleElements, setArticleData] = React.useState<object[]>([]);
+
+  React.useEffect(() => {
+    api
+      .get("/news/all_news")
+      .then((response) => {
+        setArticleData(response.data);
+        console.log(response.data);
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
   return (
     <div className="">
       <Header
+        isAuth={true}
         className={cn(
           "fixed top-0 left-0 opacity-100 transition-opacity duration-200",
           !activeHeader && "opacity-0"

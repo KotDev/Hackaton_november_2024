@@ -1,12 +1,12 @@
 import { create } from "zustand";
 
 interface IUseCategory {
-  activeCategory: number;
-  setActiveCategory: (value: number) => void;
+  activeCategory: number[];
+  setActiveCategory: (value: number[]) => void;
 }
 
 export const useCategory = create<IUseCategory>()((set) => ({
-  activeCategory: 0,
+  activeCategory: [],
   setActiveCategory: (value) => set(() => ({ activeCategory: value })),
 }));
 
@@ -32,4 +32,14 @@ interface IUseProfileInfo {
 export const useProfileInfo = create<IUseProfileInfo>()((set) => ({
   data: {},
   setProfileInfo: (value) => set(() => ({ data: value })),
+}));
+
+interface IUseBusinesInfo {
+  info: object;
+  setInfo: (value: object) => void;
+}
+
+export const useBusinesInfo = create<IUseBusinesInfo>((set) => ({
+  info: {},
+  setInfo: (value) => set(() => ({ info: value })),
 }));
