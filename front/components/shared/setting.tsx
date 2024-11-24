@@ -5,12 +5,18 @@ import { Container } from "./container";
 import { Title } from "./title";
 import { Sorting } from "./sotring";
 
+interface ICategory {
+  tag_id: number;
+  name: string;
+}
+
 interface Props {
   className?: string;
   ref?: React.MutableRefObject<null>;
+  tags: ICategory[];
 }
 
-export const Setting = ({ className, ref }: Props) => {
+export const Setting = ({ className, ref, tags }: Props) => {
   return (
     <Container ref={ref} className={cn("", className)}>
       <Title
@@ -19,7 +25,7 @@ export const Setting = ({ className, ref }: Props) => {
         className="text-white font-bold"
       />
       <div className="mt-2 flex justify-between">
-        <Categories className="" />
+        <Categories tags={tags} className="" />
         <Sorting />
       </div>
     </Container>

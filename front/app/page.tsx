@@ -12,6 +12,24 @@ import { useIntersection } from "react-use";
 import { AuthForm } from "@/components/shared/auth";
 import { api } from "@/Api/Auth/route";
 
+interface ICategory {
+  tag_id: number;
+  name: string;
+}
+
+interface ICard {
+  title?: string;
+  description?: string;
+  date?: string;
+  news_id: number;
+  tags?: ICategory[];
+  link?: URL;
+}
+
+// interface QueryFilters {
+//   tags: string;
+// }
+
 export default function Home() {
   const interSectionRef = React.useRef(null);
   const intersection = useIntersection(interSectionRef, {
@@ -26,26 +44,24 @@ export default function Home() {
     } else setActiveHeader(true);
   }, [intersection?.isIntersecting]);
 
-  const [category, setCategory] = React.useState([]);
+  const [category, setCategory] = React.useState<ICategory[]>([]);
 
   React.useEffect(() => {
     api
       .get("/news/tags")
       .then((response) => {
         setCategory(response.data);
-        console.log(response.data);
       })
       .catch((err) => console.error(err));
   }, []);
 
-  const [articleElements, setArticleData] = React.useState<object[]>([]);
+  const [articleElements, setArticleData] = React.useState<ICard[]>([]);
 
   React.useEffect(() => {
     api
       .get("/news/all_news")
       .then((response) => {
         setArticleData(response.data);
-        console.log(response.data);
       })
       .catch((err) => console.error(err));
   }, []);
@@ -60,10 +76,17 @@ export default function Home() {
         )}
       />
       <Top ref={interSectionRef} />
-      <Setting />
+      <Setting tags={category} />
       <Container className="grid grid-cols-2 gap-16 mt-[120px]">
-        {[...new Array(10)].map((_, i) => (
-          <ElementCard key={i} />
+        {articleElements.map((e, _) => (
+          <ElementCard
+            news_id={e.news_id}
+            link={e.link}
+            date={e.date}
+            description={e.description}
+            tags={e.tags}
+            key={e.news_id}
+          />
         ))}
       </Container>
       <Container className="flex justify-center my-[120px]">
