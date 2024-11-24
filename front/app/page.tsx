@@ -44,17 +44,6 @@ export default function Home() {
     } else setActiveHeader(true);
   }, [intersection?.isIntersecting]);
 
-  const [category, setCategory] = React.useState<ICategory[]>([]);
-
-  React.useEffect(() => {
-    api
-      .get("/news/tags")
-      .then((response) => {
-        setCategory(response.data);
-      })
-      .catch((err) => console.error(err));
-  }, []);
-
   const [articleElements, setArticleData] = React.useState<ICard[]>([]);
 
   React.useEffect(() => {
@@ -76,19 +65,21 @@ export default function Home() {
         )}
       />
       <Top ref={interSectionRef} />
-      <Setting tags={category} />
-      <Container className="grid grid-cols-2 gap-16 mt-[120px]">
-        {articleElements?.map((e, _) => (
-          <ElementCard
-            news_id={e.news_id}
-            link={e.link}
-            date={e.date}
-            description={e.description}
-            tags={e.tags}
-            key={e.news_id}
-          />
-        ))}
-      </Container>
+      <Setting />
+      {articleElements.length > 0 && (
+        <Container className="grid grid-cols-2 gap-16 mt-[120px]">
+          {articleElements.map((e, _) => (
+            <ElementCard
+              news_id={e.news_id}
+              link={e.link}
+              date={e.date}
+              description={e.description}
+              tags={e.tags}
+              key={e.news_id}
+            />
+          ))}
+        </Container>
+      )}
       <Container className="flex justify-center my-[120px]">
         <Button variant="secondary" className={"dark"}>
           Показать еще
