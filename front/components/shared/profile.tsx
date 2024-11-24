@@ -1,6 +1,5 @@
 import { api } from "@/Api/Auth/route";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/router";
 import React from "react";
 
 interface Props {
