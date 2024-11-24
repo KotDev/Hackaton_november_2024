@@ -17,13 +17,17 @@ interface ICategory {
   name: string;
 }
 
-interface ICard {
+interface INews {
   title: string;
   description: string;
   date: string;
   news_id: number;
-  tags: ICategory[];
   link: string;
+}
+
+interface ICard {
+  news: INews;
+  tags: ICategory[];
 }
 
 // interface QueryFilters {
@@ -71,15 +75,7 @@ export default function Home() {
         <>
           <Container className="grid grid-cols-2 gap-16 mt-[120px]">
             {articleElements.map((e, _) => (
-              <ElementCard
-                news_id={e.news_id}
-                link={e.link}
-                title={e.title}
-                date={e.date}
-                description={e.description}
-                tags={e.tags}
-                key={e.news_id + "_article"}
-              />
+              <ElementCard tags={e.tags} news={e.news} />
             ))}
           </Container>
           <Container className="flex justify-center my-[120px]">

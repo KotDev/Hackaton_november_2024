@@ -7,27 +7,24 @@ interface ICategory {
   name: string;
 }
 
-interface ICard {
+interface INews {
   title: string;
   description: string;
   date: string;
   news_id: number;
-  tags: ICategory[];
   link: string;
+}
+
+interface ICard {
+  news: INews;
+  tags: ICategory[];
 }
 
 interface Props extends ICard {
   className?: string;
 }
 
-export const ElementCard = ({
-  className,
-  title,
-  description,
-  date,
-  tags,
-  link,
-}: Props) => {
+export const ElementCard = ({ className, news, tags }: Props) => {
   const [isActive, setIsActive] = React.useState(false);
 
   return (
@@ -48,13 +45,13 @@ export const ElementCard = ({
             </p>
           ))}
         </div>
-        <a href={link} className="text-white font-semibold text-2xl">
-          {title}
+        <a href={news.link} className="text-white font-semibold text-2xl">
+          {news.title}
         </a>
-        <p className="text-gray-100 ">{date}</p>
+        <p className="text-gray-100 ">{news.date}</p>
       </div>
       {isActive && (
-        <div className="text-white font-normal text-sm">{description}</div>
+        <div className="text-white font-normal text-sm">{news.description}</div>
       )}
       <Button
         type={"button"}
