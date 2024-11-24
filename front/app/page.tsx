@@ -18,11 +18,11 @@ interface ICategory {
 }
 
 interface ICard {
-  title?: string;
-  description?: string;
-  date?: string;
+  title: string;
+  description: string;
+  date: string;
   news_id: number;
-  tags?: ICategory[];
+  tags: ICategory[];
   link: string;
 }
 
@@ -74,6 +74,7 @@ export default function Home() {
               <ElementCard
                 news_id={e.news_id}
                 link={e.link}
+                title={e.title}
                 date={e.date}
                 description={e.description}
                 tags={e.tags}

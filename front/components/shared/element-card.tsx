@@ -8,11 +8,11 @@ interface ICategory {
 }
 
 interface ICard {
-  title?: string;
-  description?: string;
-  date?: string;
+  title: string;
+  description: string;
+  date: string;
   news_id: number;
-  tags?: ICategory[];
+  tags: ICategory[];
   link: string;
 }
 
@@ -53,7 +53,9 @@ export const ElementCard = ({
         </a>
         <p className="text-gray-100 ">{date}</p>
       </div>
-      {isActive && <div className="">{description}</div>}
+      {isActive && (
+        <div className="text-white font-normal text-sm">{description}</div>
+      )}
       <Button
         type={"button"}
         variant={"default"}
