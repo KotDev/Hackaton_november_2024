@@ -21,7 +21,7 @@ export const Categories = ({ className, tags }: Props) => {
     <div
       className={cn("inline-flex bg-gray-100 p-1 rounded-2xl z-10", className)}
     >
-      {tags.map((e) => (
+      {tags?.map((e) => (
         <div
           className={cn(
             "cursor-pointer",

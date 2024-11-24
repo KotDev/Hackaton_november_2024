@@ -78,7 +78,7 @@ export default function Home() {
       <Top ref={interSectionRef} />
       <Setting tags={category} />
       <Container className="grid grid-cols-2 gap-16 mt-[120px]">
-        {articleElements.map((e, _) => (
+        {articleElements?.map((e, _) => (
           <ElementCard
             news_id={e.news_id}
             link={e.link}
