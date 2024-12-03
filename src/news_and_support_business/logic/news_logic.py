@@ -75,8 +75,10 @@ class NewsLogic:
         if not news:
             return
 
+
         for new in news:
             content = await NewsLogic.pars_news_info(new)
+            print(f"{new.title} | {content}")
             tags = model_tag.analyze(new.title, content)
 
             # Убедимся, что анализатор вернул строки

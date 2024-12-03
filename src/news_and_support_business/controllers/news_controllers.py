@@ -22,7 +22,8 @@ async def get_all_news(tag_names: list[str] | None = Query(None), order_by: bool
 
     ribbon = RibbonNewsSchema(ribbon=[ResponseNewsSchema(news=NewsSchema(news_id=news.id,
                                                                          title=news.title,
-                                                                         description= summarize_text(await NewsLogic.pars_news_info(news)),
+                                                                         description=await NewsLogic.pars_news_info(news),
+                                                                         link=news.link,
                                                                          date=news.date),
                                 tags=[TagsSchema(tag_id=tag.id, name=tag.name) for tag in news.tags]
                                 if news.tags else []) for news in news_with_tags] if news_with_tags else [])

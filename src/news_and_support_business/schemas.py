@@ -9,6 +9,7 @@ class NewsSchema(BaseModel):
     news_id: int
     title: str
     description: str
+    link: str
     date: datetime
 
     model_config = {"from_attributes": True}

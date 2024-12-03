@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import torch
@@ -17,6 +19,7 @@ THRESHOLD = 0.5
 
 from transformers import BertTokenizer, BertModel
 tokenizer = BertTokenizer.from_pretrained('cointegrated/rubert-tiny')
+BASE_DIR = Path(__file__).resolve().parent
 
 target_list = ['Частный', 'Государственный', 'Муниципальный', 'Смешанный', 'Стартап', 'Малый', 'Средний', 'Крупный','Локальный', 'Региональный', 'Международный','Физ.Лица', 'Юр.Лица', 'UnrelevantText']
 another_categories = ['Частный', 'Государственный', 'Муниципальный', 'Смешанный', 'Стартап', 'Малый', 'Средний', 'Крупный','Локальный', 'Региональный', 'Международный','Физ.Лица', 'Юр.Лица', 'UnrelevantText']

@@ -67,6 +67,7 @@ class BusinessSupportLogic:
             return
 
         for bs in business_supports:
+            print(f"{bs.name} | {bs.description}")
             tags = model_tag.analyze(bs.name, bs.description)
 
             # Убедимся, что анализатор вернул строки
