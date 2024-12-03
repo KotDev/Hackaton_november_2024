@@ -56,16 +56,16 @@ services:
       networks:
         - work_network
 
-  app:
-    build:
-      context: .
-      dockerfile: src/Dockerfile
-    container_name: fastapi_app
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./src_data
-    environment:
-      - PYTHONUNBUFFERED=1
-    networks:
-      - work_network
+#  app:
+#    build:
+#      context: .
+#      dockerfile: src/Dockerfile
+#    container_name: fastapi_app
+#    ports:
+#      - "8000:8000"
+#    volumes:
+#      - ./src_data
+#    environment:
+#      - PYTHONUNBUFFERED=1
+#    networks:
+#      - work_network
